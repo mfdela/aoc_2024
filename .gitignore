@@ -27,9 +27,12 @@ aoc_2024-*.tar
 
 # Secrets
 /config/*.secret.exs
+/config/.env.exs
+
 
 # Language server
 .elixir_ls/
 
 # Beam files
 *.beam
+
