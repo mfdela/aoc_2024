@@ -120,6 +120,7 @@ defmodule Mix.Tasks.Aoc.Generate.Day do
   end
 
   defp advent_year() do
-    Application.get_env(:aoc, :year) || raise "No year configure in config.exs"
+    config = Application.get_env(:aoc, :input)
+    Keyword.get(config, :year, 2024)
   end
 end
