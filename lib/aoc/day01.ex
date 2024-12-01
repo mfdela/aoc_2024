@@ -2,7 +2,6 @@ defmodule Aoc.Day01 do
   def part1(args) do
     args
     |> clean_input()
-    |> extract_lists()
     |> sort()
     |> list_difference()
   end
@@ -11,27 +10,23 @@ defmodule Aoc.Day01 do
     input
     |> String.split("\n", trim: true)
     |> Enum.map(&String.split(&1, ~r/\s+/))
-    |> Enum.map(&Enum.map(&1, fn x -> String.to_integer(x) end))
+    |> Enum.map(fn [x, y] -> {String.to_integer(x), String.to_integer(y)} end)
+    |> Enum.unzip()
   end
 
-  def extract_lists(list),
-    do: Enum.reduce(list, [[], []], fn [x, y], [list1, list2] -> [[x | list1], [y | list2]] end)
+  def sort({list1, list2}), do: {Enum.sort(list1), Enum.sort(list2)}
 
-  def sort(list_of_lists), do: Enum.map(list_of_lists, fn list -> Enum.sort(list) end)
-
-  def list_difference([list1, list2]) do
-    Enum.reduce(0..(length(list1) - 1), 0, fn i, acc ->
-      acc + abs(Enum.at(list1, i) - Enum.at(list2, i))
-    end)
+  def list_difference({list1, list2}) do
+    Enum.zip(list1, list2)
+    |> Enum.reduce(0, fn {a, b}, s -> s + abs(a - b) end)
   end
 
   def part2(args) do
-    [list1, list2] =
+    {list1, list2} =
       args
       |> clean_input()
-      |> extract_lists()
 
-    Enum.reduce(list1, 0, fn x, acc -> acc + x * count_occurrence(list2, x) end)
+    Enum.reduce(list1, 0, fn x, acc -> acc + x * Enum.count(list2, &(&1 == x)) end)
   end
 
   def count_occurrence([], _), do: 0
