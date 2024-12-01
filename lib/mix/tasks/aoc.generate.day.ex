@@ -62,17 +62,19 @@ defmodule Mix.Tasks.Aoc.Generate.Day do
 
         import #{day_module_name}
 
-        @tag :skip
+        def test_input() do
+          ""
+        end
+
         test "part1" do
-          input = nil
+          input = test_input()
           result = part1(input)
 
           assert result
         end
 
-        @tag :skip
         test "part2" do
-          input = nil
+          input = test_input()
           result = part2(input)
 
           assert result
