@@ -22,14 +22,10 @@ defmodule Aoc.Day01 do
   end
 
   def part2(args) do
-    {list1, list2} =
-      args
-      |> clean_input()
-
-    Enum.reduce(list1, 0, fn x, acc -> acc + x * Enum.count(list2, &(&1 == x)) end)
+    args
+    |> clean_input()
+    |> then(fn {list1, list2} ->
+      Enum.reduce(list1, 0, fn x, acc -> acc + x * Enum.count(list2, &(&1 == x)) end)
+    end)
   end
-
-  def count_occurrence([], _), do: 0
-  def count_occurrence([x | xs], x), do: 1 + count_occurrence(xs, x)
-  def count_occurrence([_ | xs], x), do: count_occurrence(xs, x)
 end
