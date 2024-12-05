@@ -47,6 +47,6 @@ defmodule Aoc.Day05Test do
     input = test_input()
     result = part2(input)
 
-    assert result
+    assert result == 123
   end
 end

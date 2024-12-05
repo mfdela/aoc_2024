@@ -1,84 +1,53 @@
 defmodule Aoc.Day05 do
   def part1(args) do
-    args
-    |> process_input()
-    |> then(fn {before_rules, after_rules, updates} ->
-      Enum.filter(updates, fn u -> u == sort_update(u, before_rules, after_rules) end)
-      |> Enum.map(&extract_middle/1)
-      |> Enum.sum()
-    end)
+    {rules, updates} =
+      args
+      |> process_input()
+
+    updates
+    |> Enum.filter(fn u -> u == sort(u, rules) end)
+    |> Enum.map(&extract_middle/1)
+    |> Enum.sum()
   end
 
   def process_input(input) do
-    input
-    |> String.split("\n", trim: true)
-    |> Enum.reduce({%{}, %{}, []}, fn x, acc ->
-      {before_rules, after_rules, updates} = acc
+    [rules_string, updates_string] = String.split(input, "\n\n", trim: true)
 
-      cond do
-        String.contains?(x, "|") ->
-          r =
-            x
-            |> String.split("|")
-            |> Enum.map(&String.to_integer/1)
-
-          b =
-            Map.update(before_rules, Enum.at(r, 0), [Enum.at(r, 1)], fn l ->
-              l ++ [Enum.at(r, 1)]
-            end)
-
-          a =
-            Map.update(after_rules, Enum.at(r, 1), [Enum.at(r, 0)], fn l ->
-              l ++ [Enum.at(r, 0)]
-            end)
-
-          {b, a, updates}
-
-        String.contains?(x, ",") ->
-          u =
-            [
-              x
-              |> String.split(",")
-              |> Enum.map(&String.to_integer/1)
-            ] ++ updates
-
-          {before_rules, after_rules, u}
+    rules =
+      for r <- rules_string |> String.split("\n", trim: true),
+          x = r |> String.split("|"),
+          reduce: MapSet.new() do
+        acc ->
+          MapSet.put(acc, {Enum.at(x, 0), Enum.at(x, 1)})
       end
-    end)
+
+    updates =
+      for u <- String.split(updates_string, "\n", trim: true),
+          do: u |> String.split(",", trim: true)
+
+    {rules, updates}
   end
 
-  def comparison(x, y, before_rules, after_rules) do
-    # IO.inspect("Sort #{x} #{y}")
-    # IO.inspect(before_rules[y], label: "before_rules #{y}", charlists: :as_list)
-    # IO.inspect(after_rules[x], label: "after_rules #{x}", charlists: :as_list)
+  def sort(list, rules), do: Enum.sort(list, &comparison(&1, &2, rules))
 
-    cond do
-      !is_nil(before_rules[y]) && x in before_rules[y] -> false
-      !is_nil(after_rules[x]) && y in after_rules[x] -> true
-      true -> true
-    end
-  end
+  def comparison(x, y, rules), do: !MapSet.member?(rules, {y, x})
 
-  def sort_update(list, before_rules, after_rules) do
-    Enum.sort(list, &comparison(&1, &2, before_rules, after_rules))
-  end
-
-  def extract_middle(list), do: Enum.at(list, trunc(Enum.count(list) / 2))
+  def extract_middle(list), do: Enum.at(list, trunc(Enum.count(list) / 2)) |> String.to_integer()
 
   def part2(args) do
-    args
-    |> process_input()
-    |> then(fn {before_rules, after_rules, updates} ->
-      updates
-      |> Enum.map(fn u ->
-        su = sort_update(u, before_rules, after_rules)
+    {rules, updates} =
+      args
+      |> process_input()
 
-        cond do
-          su == u -> 0
-          true -> extract_middle(su)
-        end
-      end)
-      |> Enum.sum()
+    updates
+    |> Enum.map(fn u ->
+      su = sort(u, rules)
+
+      cond do
+        su == u -> 0
+        true -> extract_middle(su)
+      end
     end)
+    |> Enum.sum()
   end
 end
