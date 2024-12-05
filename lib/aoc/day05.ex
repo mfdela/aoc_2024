@@ -1,12 +1,12 @@
 defmodule Aoc.Day05 do
   def part1(args) do
-    {before_rules, after_rules, updates} =
-      args
-      |> process_input()
-
-    Enum.filter(updates, fn u -> u == sort_update(u, before_rules, after_rules) end)
-    |> Enum.map(&extract_middle/1)
-    |> Enum.sum()
+    args
+    |> process_input()
+    |> then(fn {before_rules, after_rules, updates} ->
+      Enum.filter(updates, fn u -> u == sort_update(u, before_rules, after_rules) end)
+      |> Enum.map(&extract_middle/1)
+      |> Enum.sum()
+    end)
   end
 
   def process_input(input) do
@@ -66,19 +66,19 @@ defmodule Aoc.Day05 do
   def extract_middle(list), do: Enum.at(list, trunc(Enum.count(list) / 2))
 
   def part2(args) do
-    {before_rules, after_rules, updates} =
-      args
-      |> process_input()
+    args
+    |> process_input()
+    |> then(fn {before_rules, after_rules, updates} ->
+      updates
+      |> Enum.map(fn u ->
+        su = sort_update(u, before_rules, after_rules)
 
-    updates
-    |> Enum.map(fn u ->
-      su = sort_update(u, before_rules, after_rules)
-
-      cond do
-        su == u -> 0
-        true -> extract_middle(su)
-      end
+        cond do
+          su == u -> 0
+          true -> extract_middle(su)
+        end
+      end)
+      |> Enum.sum()
     end)
-    |> Enum.sum()
   end
 end
