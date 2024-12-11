@@ -17,6 +17,7 @@ defmodule Aoc do
     :world
   end
 
+  # utilities
   def comb(0, _), do: [[]]
   def comb(_, []), do: []
 
