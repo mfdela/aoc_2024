@@ -99,7 +99,7 @@ defmodule Aoc.Day09 do
 
                 {:dont_move,
                  l
-                 |> List.update_at(pos, fn {f, s, v} -> {f, s, :visited} end)}
+                 |> List.update_at(pos, fn {f, s, _v} -> {f, s, :visited} end)}
             end
         end
       end)
