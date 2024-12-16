@@ -66,7 +66,7 @@ defmodule Aoc.Day14 do
       robots
       |> Enum.map(&elem(&1, 0))
 
-    all_unique = MapSet.size(MapSet.new(rr)) == length(rr)
+    all_unique = rr |> MapSet.new() |> MapSet.size() == length(rr)
 
     find_easter_egg(new_robots, max_x, max_y, count + 1, all_unique)
   end
