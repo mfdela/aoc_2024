@@ -77,7 +77,6 @@ defmodule Aoc.Day16 do
               {nq, np} = acc
               cost_through = node_cost + edge_cost
               neighbour_cost = get_in(np, [neighbour, :cost])
-              {node_coord, _} = node
 
               cond do
                 cost_through < neighbour_cost ->
@@ -158,7 +157,7 @@ defmodule Aoc.Day16 do
         reduce:
           {get_in(dist, [{end_node, :east}, :paths]), get_in(dist, [{end_node, :east}, :cost])} do
       acc ->
-        {p, c} = acc
+        {_p, c} = acc
 
         case get_in(dist, [{end_node, d}, :cost]) <= c do
           true ->
