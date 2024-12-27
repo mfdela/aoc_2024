@@ -16,7 +16,7 @@ defmodule Aoc.Day18 do
 
   def drop_bytes(map, bytes, first_bytes) do
     bytes
-    |> Enum.slice(0..(first_bytes - 1))
+    |> Enum.take(first_bytes)
     |> Enum.reduce(map, fn {x, y}, acc -> Map.update!(acc, {x, y}, fn _ -> "#" end) end)
   end
 
