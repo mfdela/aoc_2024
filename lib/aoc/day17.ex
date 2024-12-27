@@ -130,34 +130,24 @@ defmodule Aoc.Day17 do
       |> Enum.map(&code[:program][&1])
       |> Enum.reverse()
 
-    parse_quine(code, 0, 0, 0, false, prog_list)
+    parse_quine(code, 0, prog_list)
   end
 
-  def parse_quine(_code, _prev_reg_a, _reg_a, sol, true, _prog_list), do: {sol, true}
-  def parse_quine(_code, _prev_reg_a, _reg_a, sol, false, []), do: {sol, true}
+  def parse_quine(_code, reg_a, []), do: reg_a
 
-  def parse_quine(code, prev_reg_a, reg_a, _sol, found, [out | rest]) do
-    {v, f} =
-      Enum.reduce_while(0..7, {reg_a, found}, fn i, acc ->
-        {curr, curr_found} = acc
-        [program_out | _] = program_reg_a_out(code, curr + i)
+  def parse_quine(code, reg_a, [out | rest]) do
+    Enum.find_value(0..7, fn i ->
+      [program_out | _] = program_reg_a_out(code, reg_a * 8 + i)
 
-        cond do
-          curr_found == true ->
-            {:halt, {curr, true}}
-
-          program_out == out ->
-            {:cont, parse_quine(code, reg_a, (curr + i) * 8, curr + i, curr_found, rest)}
-
-          true ->
-            {:cont, acc}
+      if program_out == out do
+        case parse_quine(code, reg_a * 8 + i, rest) do
+          0 -> false
+          result -> result
         end
-      end)
-
-    case f do
-      true -> {v, true}
-      false -> {prev_reg_a, false}
-    end
+      else
+        false
+      end
+    end)
   end
 
   def program_reg_a_out(code, reg_a) do
@@ -174,6 +164,5 @@ defmodule Aoc.Day17 do
     args
     |> process_input()
     |> find_quine()
-    |> elem(0)
   end
 end
