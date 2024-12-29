@@ -25,7 +25,8 @@ defmodule Aoc.MixProject do
       {:tz, "~> 0.28"},
       {:benchee, "~> 1.3"},
       {:nx, "~> 0.9.2"},
-      {:libgraph, "~> 0.16.0"}
+      {:libgraph, "~> 0.16.0"},
+      {:memoize, "~> 1.4.3"}
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"}
     ]
