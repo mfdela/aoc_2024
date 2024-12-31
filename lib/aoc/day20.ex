@@ -46,6 +46,7 @@ defmodule Aoc.Day20 do
 
     best_path_dists =
       Aoc.Graphs.get_path(start_node, end_node, pred)
+      |> hd()
       |> Enum.with_index()
       |> Enum.reduce(map, fn {pos, index}, acc ->
         Map.put(acc, pos, index)

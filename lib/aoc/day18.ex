@@ -49,7 +49,7 @@ defmodule Aoc.Day18 do
 
   def find_cutoff(graph, bytes, end_node, last_grid, last_cut) do
     {_dist, predecessors} = Aoc.Graphs.shortest_paths(graph, {0, 0})
-    shortest_path = Aoc.Graphs.get_path({0, 0}, end_node, predecessors)
+    shortest_path = Aoc.Graphs.get_path({0, 0}, end_node, predecessors) |> hd
 
     case shortest_path do
       [^end_node] ->
