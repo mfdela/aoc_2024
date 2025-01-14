@@ -87,7 +87,7 @@ defmodule Aoc.Graphs do
   defp build_path(node, predecessors, path, paths) do
     case Map.get(predecessors, node) do
       nil ->
-        [[node | path]] ++ paths
+        [[node | List.wrap(path)]] ++ paths
 
       predecessor ->
         Enum.reduce(List.wrap(predecessor), paths, fn p, acc ->
