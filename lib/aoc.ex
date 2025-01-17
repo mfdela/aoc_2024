@@ -13,8 +13,7 @@ defmodule Aoc do
 
   """
   def hello do
-    IO.puts("Hello world")
-    :world
+    IO.puts("Advent of Code 2024")
   end
 
   # utilities
